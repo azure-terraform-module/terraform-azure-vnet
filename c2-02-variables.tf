@@ -35,3 +35,13 @@ variable "subnets" {
   type        = list(string)
   default     = []
 }
+
+variable "inbound_ports_map" {
+  description = "Map of inbound ports and their priorities for NSG rules"
+  type        = map(string)
+  default = {
+    "100" = "80"
+    "110" = "443"
+    "120" = "22"
+  }
+}
