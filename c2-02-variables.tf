@@ -68,5 +68,5 @@ EOF
     next_hop_type          = string
     next_hop_in_ip_address = optional(string)
   }))
-  default = null
+  default = {}  # Empty map as default
 }
