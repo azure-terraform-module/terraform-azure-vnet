@@ -9,7 +9,6 @@ resource "azurerm_route_table" "route_table" {
 
 resource "azurerm_route" "routes" {
   for_each               = var.routes
-  count                  = length(var.routes) > 0 ? 1 : 0
   name                   = each.key
   resource_group_name    = var.resource_group_name
   route_table_name       = azurerm_route_table.route_table.name
