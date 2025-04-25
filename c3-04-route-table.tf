@@ -1,4 +1,5 @@
 resource "azurerm_route_table" "route_table" {
+  count               = length(var.routes) > 0 ? 1 : 0
   name                = "${var.vnet_name}-route-table"
   location            = var.resource_group_location
   resource_group_name = var.resource_group_name
@@ -8,6 +9,7 @@ resource "azurerm_route_table" "route_table" {
 
 resource "azurerm_route" "routes" {
   for_each               = var.routes
+  count                  = length(var.routes) > 0 ? 1 : 0
   name                   = each.key
   resource_group_name    = var.resource_group_name
   route_table_name       = azurerm_route_table.route_table.name
@@ -17,7 +19,7 @@ resource "azurerm_route" "routes" {
 }
 
 resource "azurerm_subnet_route_table_association" "subnet_route_assoc" {
-  count          = length(azurerm_subnet.subnets)
+  count          = length(var.routes) > 0 ? length(azurerm_subnet.subnets) : 0
   subnet_id      = azurerm_subnet.subnets[count.index].id
   route_table_id = azurerm_route_table.route_table.id
 }
