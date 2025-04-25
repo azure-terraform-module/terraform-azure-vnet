@@ -47,17 +47,26 @@ variable "inbound_ports_map" {
 }
 
 variable "routes" {
-  description = "Map of routes with address prefixes and next hop IP addresses"
+  description = <<EOF
+Map of routes with address prefixes and next hop IP addresses.
+Example format to define routes:
+{
+  "route1" = {
+    address_prefix         = "0.0.0.0/0"
+    next_hop_type          = "Internet"
+    next_hop_in_ip_address = null
+  }
+  "route2" = {
+    address_prefix         = "10.1.0.0/16"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.0.0.4"
+  }
+}
+EOF
   type = map(object({
     address_prefix         = string
     next_hop_type          = string
     next_hop_in_ip_address = optional(string)
   }))
-  default = {
-    "route1" = {
-      address_prefix         = "0.0.0.0/0"
-      next_hop_type          = "Internet"
-      next_hop_in_ip_address = null
-    }
-  }
+  default = null
 }
