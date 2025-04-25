@@ -45,3 +45,19 @@ variable "inbound_ports_map" {
     "120" = "22"
   }
 }
+
+variable "routes" {
+  description = "Map of routes with address prefixes and next hop IP addresses"
+  type = map(object({
+    address_prefix         = string
+    next_hop_type          = string
+    next_hop_in_ip_address = optional(string)
+  }))
+  default = {
+    "route1" = {
+      address_prefix         = "0.0.0.0/0"
+      next_hop_type          = "Internet"
+      next_hop_in_ip_address = null
+    }
+  }
+}
