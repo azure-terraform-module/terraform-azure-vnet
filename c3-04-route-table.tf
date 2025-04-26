@@ -1,5 +1,5 @@
 resource "azurerm_route_table" "route_table" {
-  count               = length(var.routes) > 0 ? 1 : 0
+  for_each            = length(var.routes) > 0 ? { "route_table" = "route_table" } : {}
   name                = "${var.vnet_name}-route-table"
   location            = var.resource_group_location
   resource_group_name = var.resource_group_name
