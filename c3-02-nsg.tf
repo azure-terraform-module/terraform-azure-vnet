@@ -7,7 +7,7 @@ resource "azurerm_network_security_group" "subnets_nsg" {
 
 resource "azurerm_network_security_rule" "subnets_nsg_rule_inbound" {
   for_each                    = var.inbound_ports_map
-  name                        = "Allow-Port-${each.key == "*" ? "All" : each.key}"
+  name                        = "Allow-Port-${each.value == "*" ? "All" : each.value}"
   priority                    = tonumber(each.key)
   direction                   = "Inbound"
   access                      = "Allow"
