@@ -26,7 +26,7 @@ output "subnet_ids" {
 output "route_table_id" {
   description = "The ID of the route table"
   value       = try(azurerm_route_table.route_table.id, null)
-  
+
 }
 
 output "subnet_nsg_id" {

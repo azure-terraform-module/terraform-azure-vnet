@@ -2,9 +2,9 @@ locals {
   default_service_endpoints = ["Microsoft.Storage", "Microsoft.ContainerRegistry", "Microsoft.AzureCosmosDB", "Microsoft.ServiceBus", "Microsoft.EventHub"]
   subnets_config = [
     for idx in range(length(var.subnet_names)) : {
-      name             = var.subnet_names[idx]
+      name                            = var.subnet_names[idx]
       service_endpoints               = local.default_service_endpoints
-      address_prefixes = [var.subnet_prefixes[idx]]
+      address_prefixes                = [var.subnet_prefixes[idx]]
       default_outbound_access_enabled = false
     }
   ]
