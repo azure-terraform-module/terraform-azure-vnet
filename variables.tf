@@ -11,6 +11,7 @@ variable "dns_servers" {
 variable "vnet_name" {
   description = "The name of the virtual network."
   type        = string
+  default = null
 }
 
 variable "address_space" {
@@ -28,27 +29,18 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "private_subnet_names" {
+variable "subnet_names" {
   description = "List of names for the private subnets in the virtual network."
   type        = list(string)
 }
 
-variable "private_subnet_prefixes" {
+variable "subnet_prefixes" {
   description = "List of address prefixes (CIDR blocks) for the private subnets in the virtual network."
   type        = list(string)
 }
 
-variable "public_subnet_names" {
-  description = "List of names for the public subnets in the virtual network."
-  type        = list(string)
-}
 
-variable "public_subnet_prefixes" {
-  description = "List of address prefixes (CIDR blocks) for the public subnets in the virtual network."
-  type        = list(string)
-}
-
-variable "private_nsg_rules" {
+variable "nsg_rules" {
   description = "List of NSG (Network Security Group) rules for the private subnets."
   type = list(object({
     name                       = string
@@ -64,21 +56,6 @@ variable "private_nsg_rules" {
   default     = []
 }
 
-variable "public_nsg_rules" {
-  description = "List of NSG (Network Security Group) rules for the public subnets."
-  type = list(object({
-    name                       = string
-    priority                   = number
-    direction                  = string
-    access                     = string
-    protocol                   = string
-    source_port_range          = string
-    destination_port_range     = string
-    source_address_prefix      = string
-    destination_address_prefix = string
-  }))
-  default     = []
-}
 
 variable "private_endpoint_network_policies" {
   description = "Controls whether private endpoint network policies are enabled for the subnet."
@@ -128,31 +105,14 @@ variable "idle_timeout_in_minutes" {
 ######################################
 ##            ROUTE TABLE           ##
 ######################################
-variable "public_route_table_name" {
+variable "route_table_name" {
   description = "The name of the route table for public subnets."
   type    = string
   default = null
 }
 
-variable "private_route_table_name" {
-  description = "The name of the route table for private subnets."
-  type    = string
-  default = null
-}
-
-variable "public_routes" {
+variable "routes" {
   description = "List of public subnet route definitions, including next hop type and address."
-  type    = map(object({
-    name                   = string
-    address_prefix         = string
-    next_hop_type          = string
-    next_hop_in_ip_address = optional(string)
-  }))
-  default = {}
-}
-
-variable "private_routes" {
-  description = "List of private subnet route definitions, including next hop type and address."
   type    = map(object({
     name                   = string
     address_prefix         = string
@@ -177,19 +137,13 @@ variable "tags" {
 ######################################
 ##         SECURITY GROUP           ##
 ######################################
-variable "public_subnet_nsg_name" {
+variable "subnet_nsg_name" {
   description = "The name of the Network Security Group for public subnets."
   type = string
   default = null
 }
 
-variable "private_subnet_nsg_name" {
-  description = "The name of the Network Security Group for private subnets."
-  type = string
-  default = null
-}
-
-variable "public_subnet_nsg_rules" {
+variable "subnet_nsg_rules" {
   description = "List of NSG rules for the public subnets."
   type = list(object({
     name                       = string
@@ -205,18 +159,21 @@ variable "public_subnet_nsg_rules" {
   default     = []
 }
 
-variable "private_subnet_nsg_rules" {
-  description = "List of NSG rules for the private subnets."
-  type = list(object({
-    name                       = string
-    priority                   = number
-    direction                  = string
-    access                     = string
-    protocol                   = string
-    source_port_range          = string
-    destination_port_range     = string
-    source_address_prefix      = string
-    destination_address_prefix = string
-  }))
-  default     = []
+######################################
+##         LOCAL VARIABLE           ##
+######################################
+######################################
+##          LOCAL VARIABLE          ##
+######################################
+variable "environment" {
+  description = "Environment identifier used as a prefix for naming resources."
+  type        = string
+  default     = "dev"
+}
+
+# Business Division
+variable "business_division" {
+  description = "The business division within the organization that this infrastructure belongs to."
+  type        = string
+  default     = "mdaas"
 }

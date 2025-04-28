@@ -1,5 +1,5 @@
 locals {
-  has_nat_gateway = length(var.private_subnet_names) > 0
+  has_nat_gateway = length(var.subnet_prefixes) > 0
 }
 
 resource "azurerm_public_ip" "public_ips" {
@@ -16,7 +16,7 @@ resource "azurerm_public_ip" "public_ips" {
 resource "azurerm_nat_gateway" "natgw" {
   count = local.has_nat_gateway ? 1 : 0
 
-  name                = var.nat_gateway_name
+  name                = local.natgw_name
   location            = var.location
   resource_group_name = var.resource_group_name
   sku_name            = "Standard"
@@ -32,7 +32,7 @@ resource "azurerm_nat_gateway_public_ip_association" "natgw_association" {
 }
 
 resource "azurerm_subnet_nat_gateway_association" "natgw_association" {
-  for_each = local.has_nat_gateway ? azurerm_subnet.private_subnets : {}
+  for_each = local.has_nat_gateway ? azurerm_subnet.subnets : {}
 
   subnet_id      = each.value.id
   nat_gateway_id = azurerm_nat_gateway.natgw[0].id
