@@ -36,7 +36,7 @@ output "private_subnet_ids" {
 output "public_route_table_id" {
   description = "The ID of the public route table"
   value       = try(azurerm_route_table.public_route_table[0].id, null)
-
+  
 }
 
 output "private_route_table_id" {

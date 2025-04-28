@@ -1,9 +1,9 @@
 locals {
   subnets_with_public_sg = [
-    for s in var.public_subnets : s
+    for s in var.public_subnet_names : s
   ]
   subnets_with_private_sg = [
-    for s in var.private_subnets : s
+    for s in var.private_subnet_names : s
   ]
 
   has_public_sg  = length(local.subnets_with_public_sg) > 0
@@ -57,14 +57,14 @@ resource "azurerm_network_security_group" "private_subnet_nsg" {
 }
 
 resource "azurerm_subnet_network_security_group_association" "public_subnet_nsg" {
-  for_each = { for s in var.public_subnets : s.name => s }
+  for_each = { for s in var.public_subnet_names : s => s }
 
   subnet_id                 = azurerm_subnet.public_subnets[each.key].id
   network_security_group_id = azurerm_network_security_group.public_subnet_nsg[0].id
 }
 
 resource "azurerm_subnet_network_security_group_association" "private_subnet_nsg" {
-  for_each = { for s in var.private_subnets : s.name => s }
+  for_each = { for s in var.private_subnet_names : s => s }
 
   subnet_id                 = azurerm_subnet.private_subnets[each.key].id
   network_security_group_id = azurerm_network_security_group.private_subnet_nsg[0].id

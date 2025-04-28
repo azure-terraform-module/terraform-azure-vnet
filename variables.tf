@@ -1,98 +1,148 @@
-#### VNET
+######################################
+##                VNET              ##
+######################################
 variable "dns_servers" {
-  description = "List of DNS servers for the VNet"
+  description = "Optional list of DNS servers for the VNet. If not provided, it will default to an empty list."
   type        = list(string)
-  default     = []   # This will set an empty list by default if it's not provided
-  nullable    = true # Allows the variable to be optional
+  default     = []  # This will set an empty list by default if it's not provided
+  nullable     = true # Allows the variable to be optional
 }
 
 variable "vnet_name" {
+  description = "The name of the virtual network."
   type        = string
-  description = "The address space that is used by the virtual network"
 }
 
 variable "address_space" {
+  description = "The address space (CIDR blocks) that is used by the virtual network."
   type        = list(string)
-  description = "The address space that is used by the virtual network"
 }
 
 variable "location" {
-  type = string
+  description = "The Azure region where the virtual network will be created."
+  type        = string
 }
 
 variable "resource_group_name" {
-  type = string
+  description = "The name of the resource group where the virtual network will be created."
+  type        = string
 }
 
-variable "public_subnets" {
-  description = "List of public subnets to create"
-  type = list(object({
-    name              = string
-    address_prefixes  = list(string)
-    service_endpoints = optional(list(string), [])
-  }))
+variable "private_subnet_names" {
+  description = "List of names for the private subnets in the virtual network."
+  type        = list(string)
 }
 
-variable "private_subnets" {
-  description = "List of private subnets to create"
+variable "private_subnet_prefixes" {
+  description = "List of address prefixes (CIDR blocks) for the private subnets in the virtual network."
+  type        = list(string)
+}
+
+variable "public_subnet_names" {
+  description = "List of names for the public subnets in the virtual network."
+  type        = list(string)
+}
+
+variable "public_subnet_prefixes" {
+  description = "List of address prefixes (CIDR blocks) for the public subnets in the virtual network."
+  type        = list(string)
+}
+
+variable "private_nsg_rules" {
+  description = "List of NSG (Network Security Group) rules for the private subnets."
   type = list(object({
-    name                            = string
-    address_prefixes                = list(string)
-    service_endpoints               = optional(list(string), [])
-    default_outbound_access_enabled = optional(bool, false)
+    name                       = string
+    priority                   = number
+    direction                  = string
+    access                     = string
+    protocol                   = string
+    source_port_range          = string
+    destination_port_range     = string
+    source_address_prefix      = string
+    destination_address_prefix = string
   }))
+  default     = []
+}
+
+variable "public_nsg_rules" {
+  description = "List of NSG (Network Security Group) rules for the public subnets."
+  type = list(object({
+    name                       = string
+    priority                   = number
+    direction                  = string
+    access                     = string
+    protocol                   = string
+    source_port_range          = string
+    destination_port_range     = string
+    source_address_prefix      = string
+    destination_address_prefix = string
+  }))
+  default     = []
 }
 
 variable "private_endpoint_network_policies" {
-  type    = string
+  description = "Controls whether private endpoint network policies are enabled for the subnet."
+  type = string
   default = "Disabled"
 }
 
 variable "private_link_service_network_policies_enabled" {
-  type    = string
+  description = "Controls whether private link service network policies are enabled for the subnet."
+  type = string
   default = "true"
 }
 
 variable "service_endpoints" {
-  description = "Optional service endpoints for subnets"
+  description = "Optional list of service endpoints for subnets in the virtual network."
   type        = list(string)
   default     = []
 }
 
-###### NAT GW
+######################################
+##           NAT GATEWAY            ##
+######################################
 variable "nat_gateway_name" {
-  type    = string
+  description = "The name of the NAT Gateway to be used for outbound internet traffic."
+  type = string
   default = null
 }
 
 variable "public_ip_names" {
-  type    = list(string)
+  description = "List of public IP names to be used by the NAT Gateway."
+  type = list(string)
   default = ["natgw-ip1"]
 }
 
 variable "zones" {
-  type    = list(string)
+  description = "List of availability zones for the NAT Gateway public IP addresses."
+  type = list(string)
   default = ["1"]
 }
 
 variable "idle_timeout_in_minutes" {
-  type    = number
+  description = "Idle timeout, in minutes, for the NAT Gateway public IP addresses."
+  type = number
   default = 10
 }
 
-### route table
+######################################
+##            ROUTE TABLE           ##
+######################################
 variable "public_route_table_name" {
+  description = "The name of the route table for public subnets."
   type    = string
   default = null
 }
 
 variable "private_route_table_name" {
+  description = "The name of the route table for private subnets."
   type    = string
   default = null
 }
 
 variable "public_routes" {
-  type = map(object({
+  description = "List of public subnet route definitions, including next hop type and address."
+  type    = map(object({
     name                   = string
     address_prefix         = string
     next_hop_type          = string
@@ -102,7 +152,8 @@ variable "public_routes" {
 }
 
 variable "private_routes" {
-  type = map(object({
+  description = "List of private subnet route definitions, including next hop type and address."
+  type    = map(object({
     name                   = string
     address_prefix         = string
     next_hop_type          = string
@@ -112,29 +163,34 @@ variable "private_routes" {
 }
 
 variable "bgp_route_propagation_enabled" {
-  description = "Enable or disable BGP route propagation"
+  description = "Enable or disable BGP route propagation for the virtual network."
   type        = bool
   default     = false
 }
 
 variable "tags" {
-  description = "Tags to assign to resources"
+  description = "Tags to assign to resources in the virtual network."
   type        = map(string)
   default     = {}
 }
 
-## security group
+######################################
+##         SECURITY GROUP           ##
+######################################
 variable "public_subnet_nsg_name" {
-  type    = string
+  description = "The name of the Network Security Group for public subnets."
+  type = string
   default = null
 }
 
 variable "private_subnet_nsg_name" {
-  type    = string
+  description = "The name of the Network Security Group for private subnets."
+  type = string
   default = null
 }
 
 variable "public_subnet_nsg_rules" {
+  description = "List of NSG rules for the public subnets."
   type = list(object({
     name                       = string
     priority                   = number
@@ -146,11 +202,11 @@ variable "public_subnet_nsg_rules" {
     source_address_prefix      = string
     destination_address_prefix = string
   }))
-  description = "List of NSG rules for public subnets"
   default     = []
 }
 
 variable "private_subnet_nsg_rules" {
+  description = "List of NSG rules for the private subnets."
   type = list(object({
     name                       = string
     priority                   = number
@@ -162,6 +218,5 @@ variable "private_subnet_nsg_rules" {
     source_address_prefix      = string
     destination_address_prefix = string
   }))
-  description = "List of NSG rules for private subnets"
   default     = []
 }
