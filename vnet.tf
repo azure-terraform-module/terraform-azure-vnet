@@ -1,8 +1,3 @@
-resource "azurerm_virtual_network_dns_servers" "dns_servers" {
-  virtual_network_id = azurerm_virtual_network.vnet.id
-  dns_servers        = var.dns_servers
-}
-
 resource "azurerm_virtual_network" "vnet" {
   name                = var.vnet_name
   location            = var.location
@@ -12,30 +7,28 @@ resource "azurerm_virtual_network" "vnet" {
   tags = var.tags
 }
 
-# Subnets Resource
-resource "azurerm_subnet" "subnets" {
-  for_each = var.subnets
+resource "azurerm_virtual_network_dns_servers" "dns_servers" {
+  virtual_network_id = azurerm_virtual_network.vnet.id
+  dns_servers        = var.dns_servers
+}
+
+resource "azurerm_subnet" "public_subnets" {
+  for_each = { for s in var.public_subnets : s.name => s }
 
   name                 = each.key
-  resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.vnet.name
   address_prefixes     = each.value.address_prefixes
-  
-  service_endpoints = each.value.service_endpoints
+  service_endpoints    = each.value.service_endpoints
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  resource_group_name  = var.resource_group_name
+}
 
-  dynamic "delegation" {
-    for_each = each.value.delegation != null ? [1] : []
-    content {
-      name = each.value.delegation.name
-      service_delegation {
-        name    = each.value.delegation.service_name
-        actions = each.value.delegation.actions
-      }
-    }
-  }
-  
+resource "azurerm_subnet" "private_subnets" {
+  for_each = { for s in var.private_subnets : s.name => s }
+
+  name                 = each.key
+  address_prefixes     = each.value.address_prefixes
+  service_endpoints    = each.value.service_endpoints
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  resource_group_name  = var.resource_group_name
   default_outbound_access_enabled = each.value.default_outbound_access_enabled
-
-  private_endpoint_network_policies = var.private_endpoint_network_policies
-  private_link_service_network_policies_enabled = var.private_link_service_network_policies_enabled
 }

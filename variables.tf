@@ -1,7 +1,9 @@
 #### VNET
 variable "dns_servers" {
-  type = list(string)
-  default = [] # Azure default DNS
+  description = "List of DNS servers for the VNet"
+  type        = list(string)
+  default     = []  # This will set an empty list by default if it's not provided
+  nullable     = true # Allows the variable to be optional
 }
 
 variable "vnet_name" {
@@ -22,28 +24,23 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "subnets" {
-  description = "Map of subnets to create"
-  type = map(object({
+variable "public_subnets" {
+  description = "List of public subnets to create"
+  type = list(object({
+    name             = string
     address_prefixes = list(string)
     service_endpoints = optional(list(string), [])
-    delegation       = optional(object({
-      name         = string
-      service_name = string
-      actions      = list(string)
-    }))
-    default_outbound_access_enabled = optional(bool, true)
-    attached_public_route_table = optional(bool, false)
-    attached_private_route_table = optional(bool, false)
-    attached_nat_gateway = optional(bool, false)
-    attached_public_security_group =  optional(bool, false)
-    attached_private_security_group =  optional(bool, false)
   }))
 }
 
-variable "default_outbound_access_enabled" {
-  type = string
-  default = "true"
+variable "private_subnets" {
+  description = "List of private subnets to create"
+  type = list(object({
+    name             = string
+    address_prefixes = list(string)
+    service_endpoints = optional(list(string), [])
+    default_outbound_access_enabled = optional(bool, false)
+  }))
 }
 
 variable "private_endpoint_network_policies" {
@@ -168,104 +165,3 @@ variable "private_subnet_nsg_rules" {
   description = "List of NSG rules for private subnets"
   default     = []
 }
-
-
-
-
-
-
-
-
-
-
-# variable "ddos_protection_plan_enabled" {
-#   type        = bool
-#   description = "Enable or disable DDoS protection"
-#   default     = false
-# }
-
-# variable "public_routes" {
-#   type = map(object({
-#     name                   = string
-#     address_prefix         = string
-#     next_hop_type          = string
-#     next_hop_in_ip_address = optional(string)
-#   }))
-#   default     = {}
-#   description = <<DESCRIPTION
-#     (Optional) A map of route objects to create on the route table. 
-
-#     - `name` - (Required) The name of the route.
-#     - `address_prefix` - (Required) The destination to which the route applies. Can be CIDR (such as 10.1.0.0/16) or Azure Service Tag (such as ApiManagement, AzureBackup or AzureMonitor) format.
-#     - `next_hop_type` - (Required) The type of Azure hop the packet should be sent to. Possible values are VirtualNetworkGateway, VnetLocal, Internet, VirtualAppliance and None.
-#     - `next_hop_in_ip_address` - (Optional) Contains the IP address packets should be forwarded to. Next hop values are only allowed in routes where the next hop type is VirtualAppliance
-
-#     Example Input:
-
-# ```terraform
-# routes = {
-#     route1 = {
-#       name           = "test-route-vnetlocal"
-#       address_prefix = "10.2.0.0/32"
-#       next_hop_type  = "VnetLocal"
-#     }
-# }
-# ```
-# DESCRIPTION
-
-#   validation {
-#     condition     = length([for route in var.public_routes : route.name]) == length(distinct([for route in var.public_routes : route.name]))
-#     error_message = "Each route name must be unique within the route table."
-#   }
-#   validation {
-#     condition     = alltrue([for route in var.public_routes : contains(["VirtualNetworkGateway", "VnetLocal", "Internet", "VirtualAppliance", "None"], route.next_hop_type)])
-#     error_message = "next_hop_type must be one of 'VirtualNetworkGateway', 'VnetLocal', 'Internet', 'VirtualAppliance' or 'None' for all routes."
-#   }
-#   validation {
-#     condition     = alltrue([for route in var.public_routes : route.next_hop_type != "VirtualAppliance" ? route.next_hop_in_ip_address == null : true])
-#     error_message = "If next_hop_type is not VirtualAppliance, next_hop_in_ip_address must be null."
-#   }
-# }
-
-# variable "private_routes" {
-#   type = map(object({
-#     name                   = string
-#     address_prefix         = string
-#     next_hop_type          = string
-#     next_hop_in_ip_address = optional(string)
-#   }))
-#   default     = {}
-#   description = <<DESCRIPTION
-#     (Optional) A map of route objects to create on the route table. 
-
-#     - `name` - (Required) The name of the route.
-#     - `address_prefix` - (Required) The destination to which the route applies. Can be CIDR (such as 10.1.0.0/16) or Azure Service Tag (such as ApiManagement, AzureBackup or AzureMonitor) format.
-#     - `next_hop_type` - (Required) The type of Azure hop the packet should be sent to. Possible values are VirtualNetworkGateway, VnetLocal, Internet, VirtualAppliance and None.
-#     - `next_hop_in_ip_address` - (Optional) Contains the IP address packets should be forwarded to. Next hop values are only allowed in routes where the next hop type is VirtualAppliance
-
-#     Example Input:
-
-# ```terraform
-# routes = {
-#     route1 = {
-#       name           = "test-route-vnetlocal"
-#       address_prefix = "10.2.0.0/32"
-#       next_hop_type  = "VnetLocal"
-#     }
-# }
-# ```
-# DESCRIPTION
-
-#   validation {
-#     condition     = length([for route in var.private_routes : route.name]) == length(distinct([for route in var.private_routes : route.name]))
-#     error_message = "Each route name must be unique within the route table."
-#   }
-#   validation {
-#     condition     = alltrue([for route in var.private_routes : contains(["VirtualNetworkGateway", "VnetLocal", "Internet", "VirtualAppliance", "None"], route.next_hop_type)])
-#     error_message = "next_hop_type must be one of 'VirtualNetworkGateway', 'VnetLocal', 'Internet', 'VirtualAppliance' or 'None' for all routes."
-#   }
-#   validation {
-#     condition     = alltrue([for route in var.private_routes : route.next_hop_type != "VirtualAppliance" ? route.next_hop_in_ip_address == null : true])
-#     error_message = "If next_hop_type is not VirtualAppliance, next_hop_in_ip_address must be null."
-#   }
-# }

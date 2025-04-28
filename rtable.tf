@@ -1,9 +1,10 @@
 locals {
   subnets_with_public_rt = [
-    for s in var.subnets : s if try(s.attached_public_route_table, false)
+    for s in var.public_subnets : s
   ]
+
   subnets_with_private_rt = [
-    for s in var.subnets : s if try(s.attached_private_route_table, false)
+    for s in var.private_subnets : s
   ]
 
   has_public_route_table  = length(local.subnets_with_public_rt) > 0
@@ -58,21 +59,15 @@ resource "azurerm_route" "private_routes" {
 
 
 resource "azurerm_subnet_route_table_association" "public_route_table" {
-  for_each = {
-    for k, v in var.subnets :
-    k => v if try(v.attached_public_route_table, false)
-  }
+  for_each = { for s in var.public_subnets : s.name => s }
 
-  subnet_id      = azurerm_subnet.subnets[each.key].id
+  subnet_id      = azurerm_subnet.public_subnets[each.key].id
   route_table_id = azurerm_route_table.public_route_table[0].id
 }
 
 resource "azurerm_subnet_route_table_association" "private_route_table" {
-  for_each = {
-    for k, v in var.subnets :
-    k => v if try(v.attached_private_route_table, false)
-  }
+  for_each = { for s in var.private_subnets : s.name => s }
 
-  subnet_id      = azurerm_subnet.subnets[each.key].id
+  subnet_id      = azurerm_subnet.private_subnets[each.key].id
   route_table_id = azurerm_route_table.private_route_table[0].id
 }

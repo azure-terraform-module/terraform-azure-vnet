@@ -1,7 +1,5 @@
 locals {
-  has_nat_gateway = length([
-    for s in var.subnets : s if try(s.attached_nat_gateway, false)
-  ]) > 0
+  has_nat_gateway = length(var.private_subnets) > 0
 }
 
 
@@ -34,13 +32,9 @@ resource "azurerm_nat_gateway_public_ip_association" "natgw_association" {
   public_ip_address_id = each.value.id
 }
 
-# Attach NAT Gateway to private subnets
 resource "azurerm_subnet_nat_gateway_association" "natgw_association" {
-  for_each = local.has_nat_gateway ? {
-    for subnet_key, subnet in var.subnets :
-    subnet_key => subnet if try(subnet.attached_nat_gateway, false)
-  } : {}
+  for_each = local.has_nat_gateway ? azurerm_subnet.private_subnets : {}
 
-  subnet_id      = azurerm_subnet.subnets[each.key].id
+  subnet_id      = each.value.id
   nat_gateway_id = azurerm_nat_gateway.natgw[0].id
 }

@@ -14,33 +14,23 @@ output "vnet_id" {
 }
 
 output "public_subnet_names" {
-  value = [
-    for name, subnet in var.subnets :
-    name if subnet.attached_nat_gateway == false
-  ]
-}
-
-output "private_subnet_names" {
-  value = [
-    for name, subnet in var.subnets :
-    name if subnet.attached_nat_gateway == true
-  ]
-}
-
-output "private_subnet_ids" {
-  description = "List of IDs for private subnets"
-  value = [
-    for subnet in azurerm_subnet.subnets :
-    subnet.id if try(var.subnets[subnet.name].attached_nat_gateway, "") == true
-  ]
+  description = "List of public subnet names"
+  value       = [for s in azurerm_subnet.public_subnets : s.name]
 }
 
 output "public_subnet_ids" {
-  description = "List of IDs for private subnets"
-  value = [
-    for subnet in azurerm_subnet.subnets :
-    subnet.id if try(var.subnets[subnet.name].attached_nat_gateway, "") == false
-  ]
+  description = "List of public subnet IDs"
+  value       = [for s in azurerm_subnet.public_subnets : s.id]
+}
+
+output "private_subnet_names" {
+  description = "List of private subnet names"
+  value       = [for s in azurerm_subnet.private_subnets : s.name]
+}
+
+output "private_subnet_ids" {
+  description = "List of private subnet IDs"
+  value       = [for s in azurerm_subnet.private_subnets : s.id]
 }
 
 output "public_route_table_id" {
