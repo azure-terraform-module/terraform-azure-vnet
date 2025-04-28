@@ -2,8 +2,8 @@
 variable "dns_servers" {
   description = "List of DNS servers for the VNet"
   type        = list(string)
-  default     = []  # This will set an empty list by default if it's not provided
-  nullable     = true # Allows the variable to be optional
+  default     = []   # This will set an empty list by default if it's not provided
+  nullable    = true # Allows the variable to be optional
 }
 
 variable "vnet_name" {
@@ -17,18 +17,18 @@ variable "address_space" {
 }
 
 variable "location" {
-  type        = string
+  type = string
 }
 
 variable "resource_group_name" {
-  type        = string
+  type = string
 }
 
 variable "public_subnets" {
   description = "List of public subnets to create"
   type = list(object({
-    name             = string
-    address_prefixes = list(string)
+    name              = string
+    address_prefixes  = list(string)
     service_endpoints = optional(list(string), [])
   }))
 }
@@ -36,20 +36,20 @@ variable "public_subnets" {
 variable "private_subnets" {
   description = "List of private subnets to create"
   type = list(object({
-    name             = string
-    address_prefixes = list(string)
-    service_endpoints = optional(list(string), [])
+    name                            = string
+    address_prefixes                = list(string)
+    service_endpoints               = optional(list(string), [])
     default_outbound_access_enabled = optional(bool, false)
   }))
 }
 
 variable "private_endpoint_network_policies" {
-  type = string
+  type    = string
   default = "Disabled"
 }
 
 variable "private_link_service_network_policies_enabled" {
-  type = string
+  type    = string
   default = "true"
 }
 
@@ -61,22 +61,22 @@ variable "service_endpoints" {
 
 ###### NAT GW
 variable "nat_gateway_name" {
-  type = string
+  type    = string
   default = null
 }
 
 variable "public_ip_names" {
-  type = list(string)
+  type    = list(string)
   default = ["natgw-ip1"]
 }
 
 variable "zones" {
-  type = list(string)
+  type    = list(string)
   default = ["1"]
 }
 
 variable "idle_timeout_in_minutes" {
-  type = number
+  type    = number
   default = 10
 }
 
@@ -92,7 +92,7 @@ variable "private_route_table_name" {
 }
 
 variable "public_routes" {
-  type    = map(object({
+  type = map(object({
     name                   = string
     address_prefix         = string
     next_hop_type          = string
@@ -102,7 +102,7 @@ variable "public_routes" {
 }
 
 variable "private_routes" {
-  type    = map(object({
+  type = map(object({
     name                   = string
     address_prefix         = string
     next_hop_type          = string
@@ -125,12 +125,12 @@ variable "tags" {
 
 ## security group
 variable "public_subnet_nsg_name" {
-  type = string
+  type    = string
   default = null
 }
 
 variable "private_subnet_nsg_name" {
-  type = string
+  type    = string
   default = null
 }
 
