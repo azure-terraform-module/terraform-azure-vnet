@@ -3,7 +3,7 @@ locals {
 }
 
 resource "azurerm_public_ip" "public_ips" {
-  for_each = local.has_nat_gateway ? toset(var.public_ip_names) : toset([])
+  for_each = local.has_nat_gateway ? toset(local.public_ip_names) : toset([])
 
   name                = each.value
   location            = var.location

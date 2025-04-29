@@ -42,11 +42,11 @@ variable "service_endpoints" {
 ######################################
 ##           NAT GATEWAY            ##
 ######################################
-variable "public_ip_names" {
-  description = "List of public IP names to be used by the NAT Gateway."
-  type        = list(string)
-  default     = ["natgw-ip1"]
-}
+# variable "public_ip_names" {
+#   description = "List of public IP names to be used by the NAT Gateway."
+#   type        = list(string)
+#   default     = null
+# }
 
 variable "zones" {
   description = "List of availability zones for the NAT Gateway public IP addresses."

@@ -2,11 +2,14 @@ locals {
   route_table_name = "${var.vnet_name}-rtable"
   nsg_name         = "${var.vnet_name}-nsg"
   natgw_name       = "${var.vnet_name}-natgw"
-
   common_tags = {
     CreatedBy = "terraform"
     VnetName  = var.vnet_name
   }
+}
+
+locals {
+  public_ip_names = ["${local.natgw_name}-public-ip"]
 }
 
 locals {
