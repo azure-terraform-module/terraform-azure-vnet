@@ -33,22 +33,6 @@ variable "subnet_prefixes" {
   type        = list(string)
 }
 
-variable "nsg_rules" {
-  description = "List of NSG (Network Security Group) rules for the private subnets."
-  type = list(object({
-    name                       = string
-    priority                   = number
-    direction                  = string
-    access                     = string
-    protocol                   = string
-    source_port_range          = string
-    destination_port_range     = string
-    source_address_prefix      = string
-    destination_address_prefix = string
-  }))
-  default = []
-}
-
 variable "service_endpoints" {
   description = "Optional list of service endpoints for subnets in the virtual network."
   type        = list(string)

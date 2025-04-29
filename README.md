@@ -144,7 +144,8 @@ provider "azurerm" {
 vnet.tf file
 ```
 module "vnet" {
-  source = "./modules/vnet"
+  source = "azure-terraform-module/vnet/azure"
+  version = "0.0.1"
 
   vnet_name           = var.vnet_name
   location            = var.location

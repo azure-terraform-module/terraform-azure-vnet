@@ -1,5 +1,4 @@
 resource "azurerm_route_table" "route_table" {
-  # count = var.route_table_name != null ? 1 : 0
 
   location                      = var.location
   name                          = local.route_table_name
