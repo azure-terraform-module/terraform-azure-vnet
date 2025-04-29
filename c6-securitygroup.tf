@@ -5,7 +5,7 @@ resource "azurerm_network_security_group" "subnet_nsg" {
   resource_group_name = var.resource_group_name
 
   dynamic "security_rule" {
-    for_each = { for rule in local.effective_subnet_nsg_rules : rule.name => rule }
+    for_each = { for rule in var.subnet_nsg_rules : rule.name => rule }
     content {
       name                       = security_rule.value.name
       priority                   = security_rule.value.priority

@@ -21,30 +21,3 @@ locals {
     }
   ]
 }
-
-locals {
-  effective_subnet_nsg_rules = length(var.subnet_nsg_rules) > 0 ? var.subnet_nsg_rules : [
-    {
-      name                       = "AllowAllInbound"
-      priority                   = 100
-      direction                  = "Inbound"
-      access                     = "Allow"
-      protocol                   = "*"
-      source_port_range          = "*"
-      destination_port_range     = "*"
-      source_address_prefix      = "*"
-      destination_address_prefix = "*"
-    },
-    {
-      name                       = "AllowAllOutbound"
-      priority                   = 200
-      direction                  = "Outbound"
-      access                     = "Allow"
-      protocol                   = "*"
-      source_port_range          = "*"
-      destination_port_range     = "*"
-      source_address_prefix      = "*"
-      destination_address_prefix = "*"
-    }
-  ]
-}

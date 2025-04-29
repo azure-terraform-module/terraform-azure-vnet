@@ -29,7 +29,7 @@ variable "resource_group_name" {
 }
 
 variable "subnet_prefixes" {
-  description = "List of address prefixes (CIDR blocks) for the private subnets in the virtual network."
+  description = "List of address prefixes (CIDR blocks) for the subnets in the virtual network."
   type        = list(string)
 }
 
@@ -79,7 +79,7 @@ variable "tags" {
 ##         SECURITY GROUP           ##
 ######################################
 variable "subnet_nsg_rules" {
-  description = "List of NSG rules for the public subnets."
+  description = "List of NSG rules for the subnets."
   type = list(object({
     name                       = string
     priority                   = number
