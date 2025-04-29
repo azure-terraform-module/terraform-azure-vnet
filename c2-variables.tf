@@ -34,15 +34,15 @@ variable "subnet_prefixes" {
 }
 
 variable "service_endpoints" {
-  description = "Optional list of service endpoints for subnets in the virtual network."
+  description = "Optional list of service endpoints for subnets in the virtual network. Example: [\"Microsoft.Storage\", \"Microsoft.ContainerRegistry\", \"Microsoft.AzureCosmosDB\", \"Microsoft.ServiceBus\", \"Microsoft.EventHub\"]"
   type        = list(string)
-  default     = ["Microsoft.Storage", "Microsoft.ContainerRegistry", "Microsoft.AzureCosmosDB", "Microsoft.ServiceBus", "Microsoft.EventHub"]
+  default     = []
 }
 
 ######################################
 ##           NAT GATEWAY            ##
 ######################################
-variable "zones" {
+variable "nat_zones" {
   description = "List of availability zones for the NAT Gateway public IP addresses."
   type        = list(string)
   default     = ["1"]

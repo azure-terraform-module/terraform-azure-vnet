@@ -10,7 +10,7 @@ resource "azurerm_public_ip" "public_ips" {
   resource_group_name = var.resource_group_name
   allocation_method   = "Static"
   sku                 = "Standard"
-  zones               = var.zones
+  zones               = var.nat_zones
 }
 
 resource "azurerm_nat_gateway" "natgw" {
@@ -21,7 +21,7 @@ resource "azurerm_nat_gateway" "natgw" {
   resource_group_name     = var.resource_group_name
   sku_name                = "Standard"
   idle_timeout_in_minutes = var.idle_timeout_in_minutes
-  zones                   = var.zones
+  zones                   = var.nat_zones
 }
 
 resource "azurerm_nat_gateway_public_ip_association" "natgw_association" {
