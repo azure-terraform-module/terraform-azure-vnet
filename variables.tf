@@ -4,14 +4,14 @@
 variable "dns_servers" {
   description = "Optional list of DNS servers for the VNet. If not provided, it will default to an empty list."
   type        = list(string)
-  default     = []   # This will set an empty list by default if it's not provided
-  nullable    = true # Allows the variable to be optional
+  default     = []  # This will set an empty list by default if it's not provided
+  nullable     = true # Allows the variable to be optional
 }
 
 variable "vnet_name" {
   description = "The name of the virtual network."
   type        = string
-  default     = null
+  default = null
 }
 
 variable "address_space" {
@@ -29,10 +29,10 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "subnet_names" {
-  description = "List of names for the private subnets in the virtual network."
-  type        = list(string)
-}
+# variable "subnet_names" {
+#   description = "List of names for the private subnets in the virtual network."
+#   type        = list(string)
+# }
 
 variable "subnet_prefixes" {
   description = "List of address prefixes (CIDR blocks) for the private subnets in the virtual network."
@@ -53,20 +53,20 @@ variable "nsg_rules" {
     source_address_prefix      = string
     destination_address_prefix = string
   }))
-  default = []
+  default     = []
 }
 
 
 variable "private_endpoint_network_policies" {
   description = "Controls whether private endpoint network policies are enabled for the subnet."
-  type        = string
-  default     = "Disabled"
+  type = string
+  default = "Disabled"
 }
 
 variable "private_link_service_network_policies_enabled" {
   description = "Controls whether private link service network policies are enabled for the subnet."
-  type        = string
-  default     = "true"
+  type = string
+  default = true
 }
 
 variable "service_endpoints" {
@@ -80,26 +80,26 @@ variable "service_endpoints" {
 ######################################
 variable "nat_gateway_name" {
   description = "The name of the NAT Gateway to be used for outbound internet traffic."
-  type        = string
-  default     = null
+  type = string
+  default = null
 }
 
 variable "public_ip_names" {
   description = "List of public IP names to be used by the NAT Gateway."
-  type        = list(string)
-  default     = ["natgw-ip1"]
+  type = list(string)
+  default = ["natgw-ip1"]
 }
 
 variable "zones" {
   description = "List of availability zones for the NAT Gateway public IP addresses."
-  type        = list(string)
-  default     = ["1"]
+  type = list(string)
+  default = ["1"]
 }
 
 variable "idle_timeout_in_minutes" {
   description = "Idle timeout, in minutes, for the NAT Gateway public IP addresses."
-  type        = number
-  default     = 10
+  type = number
+  default = 10
 }
 
 ######################################
@@ -107,13 +107,13 @@ variable "idle_timeout_in_minutes" {
 ######################################
 variable "route_table_name" {
   description = "The name of the route table for public subnets."
-  type        = string
-  default     = null
+  type    = string
+  default = null
 }
 
 variable "routes" {
   description = "List of public subnet route definitions, including next hop type and address."
-  type = map(object({
+  type    = map(object({
     name                   = string
     address_prefix         = string
     next_hop_type          = string
@@ -139,8 +139,8 @@ variable "tags" {
 ######################################
 variable "subnet_nsg_name" {
   description = "The name of the Network Security Group for public subnets."
-  type        = string
-  default     = null
+  type = string
+  default = null
 }
 
 variable "subnet_nsg_rules" {
@@ -156,5 +156,21 @@ variable "subnet_nsg_rules" {
     source_address_prefix      = string
     destination_address_prefix = string
   }))
-  default = []
+  default     = []
+}
+
+######################################
+##          LOCAL VARIABLE          ##
+######################################
+variable "environment" {
+  description = "Environment identifier used as a prefix for naming resources."
+  type        = string
+  default     = "dev"
+}
+
+# Business Division
+variable "business_division" {
+  description = "The business division within the organization that this infrastructure belongs to."
+  type        = string
+  default     = "mdaas"
 }
