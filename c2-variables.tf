@@ -11,7 +11,6 @@ variable "dns_servers" {
 variable "vnet_name" {
   description = "The name of the virtual network."
   type        = string
-  default     = null
 }
 
 variable "address_space" {
@@ -48,19 +47,6 @@ variable "nsg_rules" {
     destination_address_prefix = string
   }))
   default = []
-}
-
-
-variable "private_endpoint_network_policies" {
-  description = "Controls whether private endpoint network policies are enabled for the subnet."
-  type        = string
-  default     = "Disabled"
-}
-
-variable "private_link_service_network_policies_enabled" {
-  description = "Controls whether private link service network policies are enabled for the subnet."
-  type        = string
-  default     = true
 }
 
 variable "service_endpoints" {
