@@ -36,7 +36,7 @@ variable "subnet_prefixes" {
 variable "service_endpoints" {
   description = "Optional list of service endpoints for subnets in the virtual network."
   type        = list(string)
-  default     = []
+  default     = ["Microsoft.Storage", "Microsoft.ContainerRegistry", "Microsoft.AzureCosmosDB", "Microsoft.ServiceBus", "Microsoft.EventHub"]
 }
 
 ######################################
@@ -91,5 +91,28 @@ variable "subnet_nsg_rules" {
     source_address_prefix      = string
     destination_address_prefix = string
   }))
-  default = []
+  default = [
+    {
+      name                       = "AllowAllInbound"
+      priority                   = 100
+      direction                  = "Inbound"
+      access                     = "Allow"
+      protocol                   = "*"
+      source_port_range          = "*"
+      destination_port_range     = "*"
+      source_address_prefix      = "*"
+      destination_address_prefix = "*"
+    },
+    {
+      name                       = "AllowAllOutbound"
+      priority                   = 200
+      direction                  = "Outbound"
+      access                     = "Allow"
+      protocol                   = "*"
+      source_port_range          = "*"
+      destination_port_range     = "*"
+      source_address_prefix      = "*"
+      destination_address_prefix = "*"
+    }
+  ]
 }
