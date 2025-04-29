@@ -36,7 +36,7 @@ variable "subnet_prefixes" {
 variable "dns_servers" {
   description = "Optional list of DNS servers for the virtual network. Defaults to Azure's default DNS if not provided."
   type        = list(string)
-  default     = []  # Azure default DNS
+  default     = [] # Azure default DNS
 }
 
 variable "subnet_nsg_rules" {
@@ -52,30 +52,14 @@ variable "subnet_nsg_rules" {
     source_address_prefix      = string
     destination_address_prefix = string
   }))
-  default     = [
-    {
-      name                       = "AllowAllInbound"
-      priority                   = 100
-      direction                  = "Inbound"
-      access                     = "Allow"
-      protocol                   = "*"
-      source_port_range          = "*"
-      destination_port_range     = "*"
-      source_address_prefix      = "*"
-      destination_address_prefix = "*"
-    },
-    {
-      name                       = "AllowAllOutbound"
-      priority                   = 200
-      direction                  = "Outbound"
-      access                     = "Allow"
-      protocol                   = "*"
-      source_port_range          = "*"
-      destination_port_range     = "*"
-      source_address_prefix      = "*"
-      destination_address_prefix = "*"
-    }
-  ]
+  default = []
+}
+
+
+variable "service_endpoints" {
+  description = "Optional list of service endpoints for subnets in the virtual network."
+  type        = list(string)
+  default     = ["Microsoft.Storage", "Microsoft.ContainerRegistry", "Microsoft.AzureCosmosDB", "Microsoft.ServiceBus", "Microsoft.EventHub"]
 }
 
 ######################################
@@ -96,8 +80,8 @@ variable "resource_group_name" {
 variable "tags" {
   description = "Tags to assign to resources"
   type        = map(string)
-  default     = {
-    CreatedBy = terraform
+  default = {
+    CreatedBy = Terraform
   }
 }
 ```
@@ -144,7 +128,8 @@ provider "azurerm" {
 vnet.tf file
 ```
 module "vnet" {
-  source = "./modules/vnet"
+  source = "azure-terraform-module/vnet/azure"
+  version = "0.0.1"
 
   vnet_name           = var.vnet_name
   location            = var.location
@@ -152,14 +137,16 @@ module "vnet" {
   address_space       = var.address_space
 
   # DNS Server
-  dns_servers = []  
+  dns_servers = []
 
   # Subnets
   subnet_prefixes = var.subnet_prefixes
 
+  # Service Endpoint
+  service_endpoints = var.service_endpoints
   # Security Group
   subnet_nsg_rules = var.subnet_nsg_rules
-  tags = var.tags
+  tags             = var.tags
 }
 ```
 

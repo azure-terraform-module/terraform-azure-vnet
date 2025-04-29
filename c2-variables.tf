@@ -29,28 +29,12 @@ variable "resource_group_name" {
 }
 
 variable "subnet_prefixes" {
-  description = "List of address prefixes (CIDR blocks) for the private subnets in the virtual network."
+  description = "List of address prefixes (CIDR blocks) for the subnets in the virtual network."
   type        = list(string)
 }
 
-variable "nsg_rules" {
-  description = "List of NSG (Network Security Group) rules for the private subnets."
-  type = list(object({
-    name                       = string
-    priority                   = number
-    direction                  = string
-    access                     = string
-    protocol                   = string
-    source_port_range          = string
-    destination_port_range     = string
-    source_address_prefix      = string
-    destination_address_prefix = string
-  }))
-  default = []
-}
-
 variable "service_endpoints" {
-  description = "Optional list of service endpoints for subnets in the virtual network."
+  description = "Optional list of service endpoints for subnets in the virtual network. Example: [\"Microsoft.Storage\", \"Microsoft.ContainerRegistry\", \"Microsoft.AzureCosmosDB\", \"Microsoft.ServiceBus\", \"Microsoft.EventHub\"]"
   type        = list(string)
   default     = []
 }
@@ -58,13 +42,7 @@ variable "service_endpoints" {
 ######################################
 ##           NAT GATEWAY            ##
 ######################################
-variable "public_ip_names" {
-  description = "List of public IP names to be used by the NAT Gateway."
-  type        = list(string)
-  default     = ["natgw-ip1"]
-}
-
-variable "zones" {
+variable "nat_zones" {
   description = "List of availability zones for the NAT Gateway public IP addresses."
   type        = list(string)
   default     = ["1"]
@@ -95,7 +73,7 @@ variable "tags" {
 ##         SECURITY GROUP           ##
 ######################################
 variable "subnet_nsg_rules" {
-  description = "List of NSG rules for the public subnets."
+  description = "List of NSG rules for the subnets."
   type = list(object({
     name                       = string
     priority                   = number
@@ -107,5 +85,28 @@ variable "subnet_nsg_rules" {
     source_address_prefix      = string
     destination_address_prefix = string
   }))
-  default = []
+  default = [
+    {
+      name                       = "AllowAllInbound"
+      priority                   = 100
+      direction                  = "Inbound"
+      access                     = "Allow"
+      protocol                   = "*"
+      source_port_range          = "*"
+      destination_port_range     = "*"
+      source_address_prefix      = "*"
+      destination_address_prefix = "*"
+    },
+    {
+      name                       = "AllowAllOutbound"
+      priority                   = 200
+      direction                  = "Outbound"
+      access                     = "Allow"
+      protocol                   = "*"
+      source_port_range          = "*"
+      destination_port_range     = "*"
+      source_address_prefix      = "*"
+      destination_address_prefix = "*"
+    }
+  ]
 }
