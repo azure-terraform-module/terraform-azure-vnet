@@ -18,7 +18,7 @@ variables.tf file
 variable "vnet_name" {
   description = "The name of the virtual network."
   type        = string
-  default     = "mdaas-dev-vnet"
+  default     = "vnet"
 }
 
 variable "address_space" {
@@ -74,14 +74,14 @@ variable "location" {
 variable "resource_group_name" {
   description = "The name of the resource group to which the resources belong."
   type        = string
-  default     = "MDaaS"
+  default     = "example"
 }
 
 variable "tags" {
   description = "Tags to assign to resources"
   type        = map(string)
   default = {
-    applied-on = "280425"
+    CreatedBy = Terraform
   }
 }
 ```
@@ -128,7 +128,8 @@ provider "azurerm" {
 vnet.tf file
 ```
 module "vnet" {
-  source = "./modules/vnet"
+  source = "azure-terraform-module/vnet/azure"
+  version = "0.0.1"
 
   vnet_name           = var.vnet_name
   location            = var.location
