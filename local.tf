@@ -1,11 +1,11 @@
 locals {
   route_table_name = coalesce(var.route_table_name, "${var.vnet_name}-rtable")
   nsg_name         = coalesce(var.subnet_nsg_name, "${var.vnet_name}-nsg")
-  natgw_name = coalesce(var.nat_gateway_name, "${var.vnet_name}-natgw")
+  natgw_name       = coalesce(var.nat_gateway_name, "${var.vnet_name}-natgw")
 
   common_tags = {
-    CreatedBy      = "terraform"
-    VnetName = var.vnet_name
+    CreatedBy = "terraform"
+    VnetName  = var.vnet_name
   }
 }
 
@@ -16,9 +16,9 @@ locals {
   ]
   subnets_config = [
     for idx in range(length(var.subnet_prefixes)) : {
-      name             = local.subnet_names[idx]
-      service_endpoints               = local.default_service_endpoints
-      address_prefixes = [var.subnet_prefixes[idx]]
+      name              = local.subnet_names[idx]
+      service_endpoints = local.default_service_endpoints
+      address_prefixes  = [var.subnet_prefixes[idx]]
     }
   ]
 }

@@ -5,7 +5,7 @@ resource "azurerm_route_table" "route_table" {
   name                          = local.route_table_name
   resource_group_name           = var.resource_group_name
   bgp_route_propagation_enabled = var.bgp_route_propagation_enabled
-  tags = merge(local.common_tags, var.tags)
+  tags                          = merge(local.common_tags, var.tags)
 }
 
 resource "azurerm_subnet_route_table_association" "route_table" {
