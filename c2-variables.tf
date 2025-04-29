@@ -29,16 +29,10 @@ variable "resource_group_name" {
   type        = string
 }
 
-# variable "subnet_names" {
-#   description = "List of names for the private subnets in the virtual network."
-#   type        = list(string)
-# }
-
 variable "subnet_prefixes" {
   description = "List of address prefixes (CIDR blocks) for the private subnets in the virtual network."
   type        = list(string)
 }
-
 
 variable "nsg_rules" {
   description = "List of NSG (Network Security Group) rules for the private subnets."
@@ -78,12 +72,6 @@ variable "service_endpoints" {
 ######################################
 ##           NAT GATEWAY            ##
 ######################################
-variable "nat_gateway_name" {
-  description = "The name of the NAT Gateway to be used for outbound internet traffic."
-  type        = string
-  default     = null
-}
-
 variable "public_ip_names" {
   description = "List of public IP names to be used by the NAT Gateway."
   type        = list(string)
@@ -105,23 +93,6 @@ variable "idle_timeout_in_minutes" {
 ######################################
 ##            ROUTE TABLE           ##
 ######################################
-variable "route_table_name" {
-  description = "The name of the route table for public subnets."
-  type        = string
-  default     = null
-}
-
-variable "routes" {
-  description = "List of public subnet route definitions, including next hop type and address."
-  type = map(object({
-    name                   = string
-    address_prefix         = string
-    next_hop_type          = string
-    next_hop_in_ip_address = optional(string)
-  }))
-  default = {}
-}
-
 variable "bgp_route_propagation_enabled" {
   description = "Enable or disable BGP route propagation for the virtual network."
   type        = bool
@@ -137,12 +108,6 @@ variable "tags" {
 ######################################
 ##         SECURITY GROUP           ##
 ######################################
-variable "subnet_nsg_name" {
-  description = "The name of the Network Security Group for public subnets."
-  type        = string
-  default     = null
-}
-
 variable "subnet_nsg_rules" {
   description = "List of NSG rules for the public subnets."
   type = list(object({
@@ -157,20 +122,4 @@ variable "subnet_nsg_rules" {
     destination_address_prefix = string
   }))
   default = []
-}
-
-######################################
-##          LOCAL VARIABLE          ##
-######################################
-variable "environment" {
-  description = "Environment identifier used as a prefix for naming resources."
-  type        = string
-  default     = "dev"
-}
-
-# Business Division
-variable "business_division" {
-  description = "The business division within the organization that this infrastructure belongs to."
-  type        = string
-  default     = "mdaas"
 }
