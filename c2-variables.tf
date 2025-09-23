@@ -13,7 +13,7 @@ variable "vnet_name" {
   type        = string
 }
 
-variable "address_space" {
+variable "vnet_address_space" {
   description = "The address space (CIDR blocks) that is used by the virtual network."
   type        = list(string)
 }
