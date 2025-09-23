@@ -49,9 +49,9 @@ variable "enable_nat_gateway" {
 }
 
 variable "nat_zones" {
-  description = "List of availability zones for the NAT Gateway public IP addresses."
+  description = "List of availability zones for the NAT Gateway and its public IP addresses. Specify zones like ['1', '2'] for multi-zone deployment, ['1'] for single zone, or [] for zone-redundant deployment (recommended for production)."
   type        = list(string)
-  default     = ["1"]
+  default     = []
 }
 
 variable "idle_timeout_in_minutes" {
