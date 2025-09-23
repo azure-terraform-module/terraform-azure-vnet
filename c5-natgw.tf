@@ -1,5 +1,5 @@
 locals {
-  has_nat_gateway = length(var.subnet_prefixes) > 0
+  has_nat_gateway = var.enable_nat_gateway
 }
 
 resource "azurerm_public_ip" "public_ips" {

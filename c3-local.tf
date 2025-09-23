@@ -14,13 +14,13 @@ locals {
 
 locals {
   subnet_names = [
-    for idx, prefix in var.subnet_prefixes : "${var.vnet_name}-subnet-${idx + 1}"
+    for idx, prefix in var.subnets : "${var.vnet_name}-subnet-${idx + 1}"
   ]
   subnets_config = [
-    for idx in range(length(var.subnet_prefixes)) : {
+    for idx in range(length(var.subnets)) : {
       name              = local.subnet_names[idx]
       service_endpoints = var.service_endpoints
-      address_prefixes  = [var.subnet_prefixes[idx]]
+      address_prefixes  = [var.subnets[idx]]
     }
   ]
 }

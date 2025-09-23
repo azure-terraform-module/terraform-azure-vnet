@@ -27,7 +27,7 @@ variable "address_space" {
   default     = ["10.0.0.0/16"]
 }
 
-variable "subnet_prefixes" {
+variable "subnets" {
   description = "List of address prefixes (CIDR blocks) for the subnets in the virtual network."
   type        = list(string)
   default     = ["10.0.2.0/24", "10.0.3.0/24", "10.0.4.0/24"]
@@ -60,6 +60,12 @@ variable "service_endpoints" {
   description = "Optional list of service endpoints for subnets in the virtual network."
   type        = list(string)
   default     = ["Microsoft.Storage", "Microsoft.ContainerRegistry", "Microsoft.AzureCosmosDB", "Microsoft.ServiceBus", "Microsoft.EventHub"]
+}
+
+variable "enable_nat_gateway" {
+  description = "Enable or disable the creation of NAT Gateway for the subnets."
+  type        = bool
+  default     = true
 }
 
 ######################################
@@ -140,7 +146,7 @@ module "vnet" {
   dns_servers = []
 
   # Subnets
-  subnet_prefixes = var.subnet_prefixes
+  subnets = var.subnets
 
   # Service Endpoint
   service_endpoints = var.service_endpoints

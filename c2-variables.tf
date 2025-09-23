@@ -28,7 +28,7 @@ variable "resource_group_name" {
   type        = string
 }
 
-variable "subnet_prefixes" {
+variable "subnets" {
   description = "List of address prefixes (CIDR blocks) for the subnets in the virtual network."
   type        = list(string)
 }
@@ -42,6 +42,12 @@ variable "service_endpoints" {
 ######################################
 ##           NAT GATEWAY            ##
 ######################################
+variable "enable_nat_gateway" {
+  description = "Enable or disable the creation of NAT Gateway for the subnets."
+  type        = bool
+  default     = true
+}
+
 variable "nat_zones" {
   description = "List of availability zones for the NAT Gateway public IP addresses."
   type        = list(string)
