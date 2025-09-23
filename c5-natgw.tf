@@ -6,7 +6,7 @@ resource "azurerm_public_ip" "public_ips" {
   for_each = local.has_nat_gateway ? toset(local.public_ip_names) : toset([])
 
   name                = each.value
-  location            = var.location
+  location            = var.resource_group_location
   resource_group_name = var.resource_group_name
   allocation_method   = "Static"
   sku                 = "Standard"
@@ -17,7 +17,7 @@ resource "azurerm_nat_gateway" "natgw" {
   count = local.has_nat_gateway ? 1 : 0
 
   name                    = local.natgw_name
-  location                = var.location
+  location                = var.resource_group_location
   resource_group_name     = var.resource_group_name
   sku_name                = "Standard"
   idle_timeout_in_minutes = var.idle_timeout_in_minutes

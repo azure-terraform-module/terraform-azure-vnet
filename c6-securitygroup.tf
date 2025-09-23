@@ -1,7 +1,7 @@
 resource "azurerm_network_security_group" "subnet_nsg" {
 
   name                = local.nsg_name
-  location            = var.location
+  location            = var.resource_group_location
   resource_group_name = var.resource_group_name
 
   dynamic "security_rule" {

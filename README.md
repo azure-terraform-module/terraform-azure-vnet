@@ -27,9 +27,9 @@ module "vnet" {
   version = "~> 1.0"
 
   # Required variables
-  vnet_name           = "my-production-vnet"
-  location            = "East US"
-  resource_group_name = "my-resource-group"
+  vnet_name               = "my-production-vnet"
+  resource_group_location = "East US"
+  resource_group_name     = "my-resource-group"
   vnet_address_space  = ["10.0.0.0/16"]
   subnets             = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
 }
@@ -42,7 +42,7 @@ module "vnet" {
 | Name | Description | Type |
 |------|-------------|------|
 | `vnet_name` | The name of the virtual network | `string` |
-| `location` | The Azure region where resources will be created | `string` |
+| `resource_group_location` | The Azure region where resources will be created | `string` |
 | `resource_group_name` | The name of the resource group | `string` |
 | `vnet_address_space` | The address space (CIDR blocks) for the virtual network | `list(string)` |
 | `subnets` | List of subnet address prefixes (CIDR blocks) | `list(string)` |
@@ -78,9 +78,9 @@ module "vnet" {
 module "basic_vnet" {
   source = "your-org/vnet/azure"
   
-  vnet_name           = "basic-vnet"
-  location            = "West US 2"
-  resource_group_name = "example-rg"
+  vnet_name               = "basic-vnet"
+  resource_group_location = "West US 2"
+  resource_group_name     = "example-rg"
   vnet_address_space  = ["10.0.0.0/16"]
   subnets             = ["10.0.1.0/24", "10.0.2.0/24"]
 }
@@ -93,9 +93,9 @@ module "advanced_vnet" {
   source = "your-org/vnet/azure"
   
   # Required
-  vnet_name           = "production-vnet"
-  location            = "East US"
-  resource_group_name = "production-rg"
+  vnet_name               = "production-vnet"
+  resource_group_location = "East US"
+  resource_group_name     = "production-rg"
   vnet_address_space  = ["10.0.0.0/16"]
   subnets             = [
     "10.0.1.0/24",  # subnet-1
@@ -136,9 +136,9 @@ module "advanced_vnet" {
 module "vnet_no_nat" {
   source = "your-org/vnet/azure"
   
-  vnet_name           = "internal-vnet"
-  location            = "Central US"
-  resource_group_name = "internal-rg"
+  vnet_name               = "internal-vnet"
+  resource_group_location = "Central US"
+  resource_group_name     = "internal-rg"
   vnet_address_space  = ["192.168.0.0/16"]
   subnets             = ["192.168.1.0/24", "192.168.2.0/24"]
   

@@ -1,6 +1,6 @@
 resource "azurerm_route_table" "route_table" {
 
-  location                      = var.location
+  location                      = var.resource_group_location
   name                          = local.route_table_name
   resource_group_name           = var.resource_group_name
   bgp_route_propagation_enabled = var.bgp_route_propagation_enabled
