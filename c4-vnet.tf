@@ -17,8 +17,14 @@ resource "azurerm_subnet" "subnets" {
 
   name                            = each.key
   address_prefixes                = each.value.address_prefixes
-  service_endpoints               = each.value.service_endpoints
   virtual_network_name            = azurerm_virtual_network.vnet.name
   resource_group_name             = var.resource_group_name
   default_outbound_access_enabled = false
+
+  dynamic "service_endpoint" {
+    for_each = each.value.service_endpoints
+    content {
+      service = service_endpoint.value
+    }
+  }
 }
