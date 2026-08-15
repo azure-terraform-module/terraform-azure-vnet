@@ -17,7 +17,7 @@ A Terraform module to create a comprehensive Azure Virtual Network (VNet) with s
 | Name | Version |
 |------|---------|
 | terraform | >= 1.9, < 2.0 |
-| azurerm | ~> 4.0 |
+| azurerm | ~> 5.0 |
 
 ## 🎯 Quick Start
 
@@ -176,13 +176,15 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 4.0"
+      version = "~> 5.0"
     }
   }
 }
 
 provider "azurerm" {
   features {}
+  # AzureRM v5 no longer auto-registers resource providers by default.
+  # For v4-style auto-registration add: resource_provider_registrations = "legacy"
 }
 ```
 
